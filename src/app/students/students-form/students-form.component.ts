@@ -264,12 +264,14 @@ export class StudentsFormComponent implements OnInit {
     this.corporateService.getStudent(value).subscribe(data => {
       feedback.close();
       let student = data[0];
+      // Quando encontrado mais de um curso
       if(student.courses.length > 1) {
         return this.chooseCourse(student, btnSearch);
       }
       if(btnSearch){
         btnSearch.disabled = false;
       }
+      //Quando encontrado porém sem curso valido
       if(student.courses.length == 0) {
         return this.snackBar.open('Concluinte encontrado, porém sem curso vinculado','',{
           duration: 5000

@@ -1,5 +1,5 @@
 <md-toolbar class="title-form">
-  <md-icon *ngIf="isSearch" class="margin14">search</md-icon>
+  <md-icon *ngIf="isSearch">search</md-icon>
   <md-input-container class="fakeHint" floatPlaceholder="never" *ngIf="isSearch" style="width: 100%;">
     <input id="search" autofocus mdInput #inputSearch placeholder="Pesquisar" (input)="changeSearch($event.target.value)">
   </md-input-container>
@@ -112,12 +112,12 @@
       <td>{{student.class}}</td>
       <td>{{student.regional}}</td>
       <td>
-        <button md-icon-button (click)="edit(student.id)" class="button-edit" mdTooltip="Editar concluinte"
+        <button md-icon-button (click)="edit(student.id)" class="button-edit" mdTooltip="Editar"
                 *ngIf="user?.permissions[0].update">
           <md-icon>edit</md-icon>
         </button>
 
-        <button md-icon-button (click)="edit(student.id)" class="button-edit" mdTooltip="Visualizar concluinte"
+        <button md-icon-button (click)="edit(student.id)" class="button-edit" mdTooltip="Visualizar"
                 *ngIf="user?.permissions[0].view && !user?.permissions[0].create && !user?.permissions[0].update">
           <md-icon>remove_red_eyes</md-icon>
         </button>
@@ -141,7 +141,7 @@
     </md-menu>
     <label>
       Concluintes por página:
-      <button class="md-icon-button" md-icon-button [mdMenuTriggerFor]="perPageSelect" mdTooltip="Páginas">
+      <button class="md-icon-button" md-icon-button [mdMenuTriggerFor]="perPageSelect" mdTooltip="Concluintes">
         {{ apiLimit }}<md-icon class="md-toolbar grey">arrow_drop_down</md-icon>
       </button>
     </label>

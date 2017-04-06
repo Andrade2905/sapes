@@ -16,6 +16,7 @@ export class CorporateService {
   private headers = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded'
   });
+  private situacaoCursoAllow = [1, 2]; //1- Em andamento, 2- Concluido
   private modalitiesAllow = [11,15,31,41];
   //21 - qualificação
   private options = new RequestOptions({ headers: this.headers });
@@ -107,7 +108,7 @@ export class CorporateService {
       home_phone: student.telefone_num == null ? null : student.telefone_ddd + "" + student.telefone_num,
       //Filter for curse with situacao == 2
       courses: student.cursos.filter(curso => {
-        return curso.cd_situacao == 2 && this.modalitiesAllow.indexOf(curso.cd_modalidade) != -1;
+        return this.situacaoCursoAllow.indexOf(curso.cd_situacao) != -1 && this.modalitiesAllow.indexOf(curso.cd_modalidade) != -1;
       }).map(curso => ({
         regional: curso.dr,
         course_id: curso.ds_curso == null ? null : this.captureCourse(curso.ds_curso),

@@ -96,3 +96,9 @@ table tr>td:nth-child(8){
   text-align: right;
 }
 
+
+table tr>th:nth-child(3),
+table tr>th:nth-child(7),
+table tr>th:nth-child(8){
+  width: 20px;
+}

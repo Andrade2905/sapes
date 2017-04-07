@@ -55,7 +55,7 @@ Controls[1] = formBuilder.group({
     pronatec_id: [null],
     class: [null, [
       Validators.required,
-      Validators.maxLength(10)
+      Validators.maxLength(20)
     ]],
     distance_education: [null],
     regimental_gratuity: [null],

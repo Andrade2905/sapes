@@ -1,3 +1,146 @@
-<p>
-  {{student?.name}}
-</p>
+<!-- Resumo das informações Básicas do Concluinte -->
+<md-card>
+  <md-card-title>DADOS DO CONCLUINTE</md-card-title>
+</md-card>
+
+<md-card>
+    <div style="text-transform: uppercase" class="float-left">
+      <span class="text-title"> &nbsp; </span>
+      {{student?.name}}
+    </div>
+    <div class="float-right">
+      <span class="text-title"> CPF: </span>
+      {{student?.cpf_number}}
+    </div>
+    <div class="clear-both">&nbsp;</div>
+
+    <div class="float-left">
+      {{student?.modality.description}}
+    </div>
+    <div class="clear-both">&nbsp;</div>
+  
+    <div  class="float-left">
+      <span class="text-title"> Área Tecnologica: </span>
+      {{student?.area.description}}
+    </div>
+
+    <div class="float-right">
+      <span class="text-title"> DR: </span>
+      {{student?.regional}}
+    </div>
+    <div class="clear-both">&nbsp;</div>
+
+    <div  class="float-left">
+      <span class="text-title"> Curso: </span>
+      {{student?.course.description}}
+    </div>
+    <div class="float-right">
+      <span class="text-title"> Período: </span>
+      {{student?.start_month}}/{{student?.start_year}} - {{student?.end_month}}/{{student?.end_year}} <!-- Fazer Pipe mês-->
+    </div>
+    <div class="clear-both">&nbsp;</div>
+
+    <div  class="float-left">
+      <span class="text-title"> Turma: </span>
+      {{student?.class}}
+    </div>
+    <div class="float-right">
+      <span class="text-title"> Unidade: </span>
+      {{student?.unit.description}}
+    </div>
+    <div class="clear-both">&nbsp;</div>
+
+    <div  class="float-left">
+      <span class="text-title"> Email: </span>
+      {{student?.email}}
+    </div>
+    <div class="float-right">
+      <span class="text-title"> Celular: </span>
+      {{student?.cell_phone}}
+    </div>
+    <div class="clear-both">&nbsp;</div>
+</md-card>
+<!-- Demais informações do Concluinte -->
+<!-- Dados Pessoais -->
+<md-card>
+  <span class="text-title"> Dados Pessoais: </span>
+  <span class="text-title"> &nbsp; </span>
+  <div >
+    <span class= "division " > <b>RG:</b> &nbsp; {{student?.rg_number}} </span>
+  
+    <span class= "division " > <b>Sexo:</b> Feminino</span><!-- Fazer Pipe do gender -->
+  
+    <span class= "division " > <b>Data Nascimento:</b> &nbsp; {{student?.birth_date}}</span>
+ 
+    <span class= "division " > <b>Cor/Etnia:</b> &nbsp; {{student?.ethnicity.description}}</span>
+  </div>
+
+  <div class="clear-both">&nbsp;</div>
+
+  <div class="float-left">
+    <span class= "division " > <b>Estudou/Estuda em que tipo de escola:</b> &nbsp; Pública </span> <!-- Fazer Pipe -->
+  </div>
+
+  <div class="float-right">
+    <span class= "division " > <b>Possui alguma Deficiência: </b> Sim, {{student?.disability.description}}</span> <!-- Fazer Pipe -->
+  </div>
+
+  <div class="clear-both">&nbsp;</div>                                                                                                            
+</md-card>
+<!-- Dados Escolar -->
+<md-card>
+  <span class="text-title"> Dados Escolar: </span>
+  <span class="text-title"> &nbsp; </span>
+  <div class="float-left">
+    <span class= "division " > <b>Ocupação:</b> &nbsp; {{student?.occupation.description}} </span>
+  </div>
+
+  <div class="float-right">
+    <span class= "division " > <b>EAD:</b> Não</span><!-- Fazer Pipe do EAD -->
+  </div>
+
+  <div class="clear-both">&nbsp;</div> 
+
+  <div >
+    <span class= "division " > <b>Gratuidade Regimental:</b> &nbsp; Não </span>
+  
+    <span class= "division " > <b>Convênio:</b> &nbsp; Não</span><!-- Fazer Pipe do gender -->
+  
+    <span class= "division " > <b>Pronatec:</b> &nbsp; Sim, {{student?.pronatec.description}}</span>
+ 
+  </div>
+
+</md-card>
+<!-- Dados Contatos -->
+
+<md-card>
+   <span class="text-title"> Dados de Contato: </span>
+   <span class="text-title"> &nbsp; </span>
+  <div class="float-left">
+    <span class= "division " > <b>Endereço:</b> &nbsp; {{student?.address}} </span>
+  </div>
+
+  <div class="float-right">
+    <span class= "division " > <b>Complemento:</b> &nbsp; {{student?.address_complement}} </span>
+  </div>
+ 
+
+</md-card>
+
+<!-- Butões -->
+<md-card> 
+  <div class="float-left">
+  <button md-raised-button type="submit">
+   <md-icon>more_horiz</md-icon>  Mostrar Detalhes 
+      </button>
+  </div>
+  <div class="float-right">
+     <button md-raised-button color="accent"  type="submit">
+        <md-icon>reply</md-icon>  VOLTAR 
+     </button>
+     <button md-raised-button color="primary"  type="submit">
+       <md-icon>print</md-icon>  IMPRIMIR 
+     </button>
+  </div>
+  <div class="clear-both">&nbsp;</div>
+</md-card>

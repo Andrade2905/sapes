@@ -25,6 +25,8 @@ export class StudentsViewComponent implements OnInit {
       .subscribe(
         student => {
           this.student = student;
+
+          console.log(this.student);
         },
         response => {
           if (response.status == 404) {

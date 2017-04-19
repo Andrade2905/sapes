@@ -69,3 +69,8 @@ md-toolbar.formActions{
 h4{
   color: rgba(0,0,0,0.87);
 }
+
+md-card.card-content{
+  padding: 0;
+  clear:both;
+}

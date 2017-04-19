@@ -102,3 +102,8 @@ table tr>th:nth-child(7),
 table tr>th:nth-child(8){
   width: 20px;
 }
+
+md-card.card-content{
+  padding: 0;
+  clear:both;
+}

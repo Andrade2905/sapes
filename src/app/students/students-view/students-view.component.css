@@ -1,65 +1,75 @@
-@media screen and (min-width: 1025px) {
-    md-card {
-        top: 100px;
-        width: 70%;
-        margin: auto;
-    }
+.studentProfile{
+    width: 90%;
+    margin: 0 auto;
+    
+}
+.studentProfile>.studentProfile-card{   
+    overflow: auto;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+    line-height: 28px;
 
-    .float-left {
-        float: left;
-        width: 40%;
-    }
-
-    .float-right {
-        float: right;
-        width: 40%;
-    }
 }
 
-@media screen and (min-width: 793px) and (max-width: 1024px) {
-    md-card {
-        top: 100px;
-        width: 80%;
-        margin: auto;
-    }
-
-    .float-left {
-        float: left;
-        width: 40%;
-    }
-
-    .float-right {
-        float: right;
-        width: 40%;
-    }
+md-icon {   
+    font-size: 65px;
 }
 
-@media screen and (max-width: 792px) {
-    md-card {
-        top: 100px;
-        width: 80%;
-        margin: auto;
-    }
-
-    .float-left {
-        width: 100%;
-    }
-
-    .float-right {
-        width: 100%;
-    }
+.icon {
+    float: left;
+    margin-right: 50px;
 }
 
-.clear-both {
-    clear: both;
+.student {
+    width: 50%;
 }
 
-.text-title {
+.dados {
+    float: left;
+    line-height: 30px;
+}
+
+.modality {
+    float: right;
+    width: 40%;
+    line-height: 30px;
+}
+
+.subtitle {
     font-size: 12px;
-    display: block;
 }
 
-.division{
-    margin-right: 40px;
-    font-size: 15px;
+
+
+
+
+@media (min-width: 34em) {
+    .studentProfile>.studentProfile-card{   
+        width:49%;
+        
+        
+    }
+    .studentProfile>.studentProfile-card:first-child{
+        width: 100%;
+    }
+    .studentProfile-card:nth-child(2n+1){
+        float: right;
+    }
+    .studentProfile-card:nth-child(2n){
+        float: left;
+    }
+} 
+
+@media (min-width: 50em) { 
+    .studentProfile{
+        width: 80%;
+    }
 }
+@media (min-width: 62em) { 
+    .studentProfile{
+        width: 70%;
+    }
+}
+
+
+

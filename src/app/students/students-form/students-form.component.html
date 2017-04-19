@@ -1,622 +1,624 @@
-<md-toolbar class="title-form">
-  <h4>{{title}} - FASE 1</h4>
-  <span class="toolbar-spacer"></span>
-  <button md-icon-button [mdMenuTriggerFor]="listMenu" mdTooltip="Mais opções">
-    <md-icon>more_vert</md-icon>
-  </button>
-  <md-menu #listMenu="mdMenu">
-    <a href="assets/download/formulario.docx" download md-menu-item>
-      <md-icon>file_download</md-icon>
-      <span>Baixar Formulário</span>
-    </a>
-    <a [href]="urlToNotionManual" target="_blank" md-menu-item>
-      <md-icon>help_outline</md-icon>
-      <span>Ajuda</span>
-    </a>
-  </md-menu>
-</md-toolbar>
-<form materialize class="col s12" [formGroup]="form" (ngSubmit)="save()" >
+<md-card class="card-content">
+  <md-toolbar class="title-form">
+    <h4>{{title}} - FASE 1</h4>
+    <span class="toolbar-spacer"></span>
+    <button md-icon-button [mdMenuTriggerFor]="listMenu" mdTooltip="Mais opções">
+      <md-icon>more_vert</md-icon>
+    </button>
+    <md-menu #listMenu="mdMenu">
+      <a href="assets/download/formulario.docx" download md-menu-item>
+        <md-icon>file_download</md-icon>
+        <span>Baixar Formulário</span>
+      </a>
+      <a [href]="urlToNotionManual" target="_blank" md-menu-item>
+        <md-icon>help_outline</md-icon>
+        <span>Ajuda</span>
+      </a>
+    </md-menu>
+  </md-toolbar>
+  <form materialize class="col s12" [formGroup]="form" (ngSubmit)="save()" >
 
-<md-tab-group [selectedIndex]="formPagination.index" (selectChange)="changedTabIndex($event)">
-  <!-- First tab: begin -->
-  <md-tab label="ALUNO" formGroupName="aluno">
+  <md-tab-group [selectedIndex]="formPagination.index" (selectChange)="changedTabIndex($event)">
+    <!-- First tab: begin -->
+    <md-tab label="ALUNO" formGroupName="aluno">
 
-    <template color="transparent" md-tab-label>
-      <md-icon *ngIf="steps[0].valid" color="primary">thumb_up</md-icon>
-      <md-icon *ngIf="!steps[0].valid" color="warn">thumb_down</md-icon>
-      ALUNO
-    </template>
+      <template color="transparent" md-tab-label>
+        <md-icon *ngIf="steps[0].valid" color="primary">thumb_up</md-icon>
+        <md-icon *ngIf="!steps[0].valid" color="warn">thumb_down</md-icon>
+        ALUNO
+      </template>
 
-    <md-grid-list cols="4" rowHeight="95px">
-      <md-grid-tile [colspan]="2">
-        <md-icon>credit_card</md-icon>
-
-        <md-input-container align="start" class="full-width">
-          <input mdInput #cpf formControlName="cpf_number" placeholder="Informe o CPF *"
-          [textMask]="{mask: mask.cpf}">
-          <md-hint class="warn" align="start" *ngIf="steps[0].controls['cpf_number'].touched || triedSend" >
-              <input-error [errors]="steps[0].controls['cpf_number'].errors" title="CPF"></input-error>
-          </md-hint>
-          <md-hint align="end">{{(cpf.value | getNumber).length}} / 11</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2" class="disability-cell">
-        <button md-icon-button type="button" #pesquisar (click)="getStudentIntegratedBase(cpf.value, pesquisar)" mdTooltip="Procurar"><md-icon class="md-toolbar">search</md-icon></button>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2">
-        <md-icon>account_box</md-icon>
-        <md-input-container class="full-width">
-          <input #name mdInput formControlName="name" placeholder="1.1 - Nome do aluno *" maxlength="100">
-          <md-hint class="warn" align="start"
-              *ngIf="steps[0].controls['name'].touched || triedSend">
-              <input-error [errors]="steps[0].controls['name'].errors" title="1.1"></input-error>
-          </md-hint>
-          <md-hint align="end">{{name.value.length}} / 100</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile class="input-space" [colspan]="2">
-        <md-icon>wc</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          <md-radio-group formControlName="gender">
-            1.2 - Selecione o sexo *<br>
-            <md-radio-button *ngFor="let gender of bdInfo.genders" class="radio-before"
-                              [value]="gender.id">{{gender.description}}</md-radio-button>
-          </md-radio-group>
-          <md-hint class="warn" align="start"
-            *ngIf="steps[0].controls['gender'].touched || triedSend">
-            <input-error [errors]="steps[0].controls['gender'].errors" title="Sexo"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2">
-        <md-icon>date_range</md-icon>
-        <md-input-container style="width:100%">
-          <input mdInput #birth class="full-width"
-           [textMask]="{mask: mask.date, pipe: autoCorrectedDatePipe}"
-           placeholder="1.3 - Data de nascimento *" formControlName="birth_date" (blur)="'OI'">
-          <md-hint class="warn" align="start"
-              *ngIf="steps[0].controls['birth_date'].touched || triedSend">
-              <input-error [errors]="steps[0].controls['birth_date'].errors" title="1.3"></input-error>
-          </md-hint>
-          <md-hint align="end">{{(birth.value | getNumber).length}} / 8</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2" class="input-space">
-        <md-icon>fingerprint</md-icon>
-        <md-input-container class="full-width">
-          <input mdInput #rg formControlName="rg_number" placeholder="1.4 - Informe o RG *" maxlength="20">
-          <md-hint class="warn" align="start"
-              *ngIf="steps[0].controls['rg_number'].touched || triedSend">
-              <input-error [errors]="steps[0].controls['rg_number'].errors" title="1.4"></input-error>
-          </md-hint>
-          <md-hint align="end">{{(rg.value | getNumber).length}} / 20</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2">
-        <md-icon>school</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          1.5 - Estudou/estuda em que tipo de escola? *<br>
-          <md-radio-group formControlName="origin_id">
-            <md-radio-button class="radio-before" value="1">Escola Pública</md-radio-button>
-            <md-radio-button class="radio-before" value="2">Escola Particular</md-radio-button>
-          </md-radio-group>
-          <md-hint class="warn" align="start"
-            *ngIf="steps[0].controls['origin_id'].touched || triedSend">
-            <input-error [errors]="steps[0].controls['origin_id'].errors" title="1.5"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2" class="input-space">
-        <md-icon>face</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          <md-select class="full-width" formControlName="ethnicity_id" placeholder="1.6 - Cor / Etnia *">
-            <md-option *ngFor="let ethnicity of bdInfo.ethnicities" [value]="ethnicity.id">{{ethnicity.description}}</md-option>
-          </md-select>
-          <md-hint class="warn" align="start"
-              *ngIf="steps[0].controls['ethnicity_id'].touched || triedSend">
-              <input-error [errors]="steps[0].controls['ethnicity_id'].errors" title="1.6"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile class="disability-cell" [colspan]="4">
-        <md-icon>accessible</md-icon>
-        <section class="flagInput">
-          <p>1.7 - Possui alguma deficiência (PcD)? *</p><br>
-          <span>Não</span>
-          <md-slide-toggle #disabilty [checked]="student.disability_id>0 && student.disability_id!=9"
-            (change)="changeDisabled(steps[0], 'disability_id', $event.checked)">
-            Sim
-          </md-slide-toggle>
-        </section>
-        <md-input-container align="left" class="fakeHint disability disabilitySelect"
-          [class.hidden]="!disabilty.checked" >
-          <input style="display:none" mdInput>
-          <md-select placeholder="1.8 - Qual deficiência?"
-                    formControlName="disability_id"
-                    [required]="disabilty.checked">
-            <md-option *ngFor="let disability of bdInfo.disabilities"
-                        [value]="disability.id">{{disability.description}}</md-option>
-          </md-select>
-          <md-hint class="warn" align="start"
-            *ngIf="triedSend">
-            <input-error [errors]="steps[0].controls['disability_id'].errors" title="1.8"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-    </md-grid-list>
-  </md-tab>
-  <!-- First tab: end -->
-
-  <!-- Second tab: begin -->
-  <md-tab formGroupName="curso">
-    <template color="transparent"  md-tab-label>
-      <md-icon *ngIf="steps[1].valid" color="primary">thumb_up</md-icon>
-      <md-icon *ngIf="!steps[1].valid" color="warn">thumb_down</md-icon>
-      CURSO
-    </template>
-     <md-grid-list cols="8" rowHeight="100px">
-      <md-grid-tile [colspan]="2">
-        <md-icon>date_range</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          <md-select class="full-width" formControlName="start_month" placeholder="2.1 - Mês de início *">
-            <md-option *ngFor="let month of bdInfo.months" [value]="month.id">{{month.valueView}}</md-option>
-          </md-select>
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['start_month'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['start_month'].errors" title="Mês Início"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2" class="input-space">
-        <md-icon>date_range</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          <md-select class="full-width" formControlName="start_year" placeholder="2.2 - Ano de início *">
-            <md-option *ngFor="let year of bdInfo.years" [value]="year">{{year}}</md-option>
-          </md-select>
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['start_year'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['start_year'].errors" title="2.2"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2" class="input-space">
-        <md-icon>date_range</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          <md-select class="full-width" formControlName="end_month" placeholder="2.3 - Mês de término *">
-            <md-option *ngFor="let month of bdInfo.months" [value]="month.id">{{month.valueView}}</md-option>
-          </md-select>
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['end_month'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['end_month'].errors" title="2.3"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2" class="input-space">
-        <md-icon>date_range</md-icon>
-        <md-input-container class="full-width">
-          <input mdInput disabled value="2017" placeholder="2.4 - Ano Termino">
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="4">
-        <md-icon>class</md-icon>
-        <md-input-container class="full-width">
-          <input mdInput class="full-width" placeholder="2.5 - Selecione o curso *" [mdAutocomplete]="autoCourse" formControlName="course_id">
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['course_id'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['course_id'].errors" title="2.5"></input-error>
-          </md-hint>
-        </md-input-container>
-        <md-autocomplete #autoCourse="mdAutocomplete" [displayWith]="displayAutocomplete">
-          <md-option *ngFor="let course of filteredCourses | async" [value]="course">
-            {{course.description}}
-          </md-option>
-        </md-autocomplete>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="4" class="input-space">
-        <md-icon>location_on</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          <md-select formControlName="regional" class="full-width" (change)="changeUnit()"  placeholder="2.6 - Selecione o DR *">
-            <md-option *ngFor="let regional of filteredRegional" [value]="regional.sigla" >{{regional.sigla}} - {{regional.description}}</md-option>
-          </md-select>
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['regional'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['regional'].errors" title="2.6"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="4">
-        <md-icon>business</md-icon>
-        <md-input-container class="full-width">
-          <input mdInput class="full-width" placeholder="2.7 - Selecione a Unidade *" [mdAutocomplete]="autoUnit" formControlName="unit_id">
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['unit_id'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['unit_id'].errors" title="2.7"></input-error>
-          </md-hint>
-        </md-input-container>
-        <md-autocomplete #autoUnit="mdAutocomplete" [displayWith]="displayAutocomplete">
-          <md-option *ngFor="let unit of filteredUnits | async" [value]="unit">
-            {{unit.description}}
-          </md-option>
-        </md-autocomplete>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="4" class="input-space">
-        <md-icon>list</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          <md-select class="full-width" formControlName="modality_id" placeholder="2.8 - Modalidade *">
-            <md-option *ngFor="let modality of modalities" [value]="modality.id">{{modality.description}}</md-option>
-          </md-select>
-
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['modality_id'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['modality_id'].errors" title="2.8"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="3">
-        <md-icon>language</md-icon>
-        <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-          <md-select class="full-width" formControlName="area_id" placeholder="2.9 - Área tecnológica *">
-            <md-option *ngFor="let area of bdInfo.areas" [value]="area.id">{{area.description}}</md-option>
-          </md-select>
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['area_id'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['area_id'].errors" title="2.9"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="3" class="input-space">
-        <md-icon>work</md-icon>
-        <md-input-container class="full-width">
-          <input mdInput class="full-width" placeholder="2.9 - Ocupação *" [mdAutocomplete]="autoOccupation" formControlName="occupation_id">
-          <md-hint class="warn" align="start"
-              *ngIf="steps[1].controls['occupation_id'].touched || triedSend">
-              <input-error [errors]="steps[1].controls['occupation_id'].errors" title="2.9"></input-error>
-          </md-hint>
-        </md-input-container>
-        <md-autocomplete #autoOccupation="mdAutocomplete" [displayWith]="displayAutocomplete">
-          <md-option *ngFor="let occupation of filteredOccupations | async" [value]="occupation">
-            {{occupation.code}} - {{occupation.description}}
-          </md-option>
-        </md-autocomplete>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="2" class="input-space">
-        <md-icon>people_outline</md-icon>
-        <md-input-container  align="start" class="full-width">
-          <input mdInput #class formControlName="class" placeholder="2.11 Turma *" maxlength="20">
-          <md-hint class="warn" align="start" *ngIf="steps[1].controls['class'].touched || triedSend" >
-              <input-error [errors]="steps[1].controls['class'].errors" title="2.11"></input-error>
-          </md-hint>
-          <md-hint align="end">{{(class.value | getNumber).length}} / 20</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="3" class="disability-cell">
-        <md-icon>school</md-icon>
-        <section class="full-width" class="flagInput">
-          <p>2.12 - Educação à distância - EAD?</p><br>
-          <span>Não</span>
-          <md-slide-toggle formControlName="distance_education">
-            Sim
-          </md-slide-toggle>
-        </section>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="5" class="disability-cell input-space">
-        <md-icon>location_city</md-icon>
-        <section class="flagInput">
-          <p>2.14 - Convênio?</p><br>
-          <span>Não</span>
-          <md-slide-toggle #agreement formControlName="agreement"
-              (change)="changeDisabled(steps[1], 'agreement_name', $event.checked)">
-            Sim
-          </md-slide-toggle>
-        </section>
-        <md-input-container class="disabilitySelect" [class.hidden]="!agreement.checked">
-          <input [required]="agreement.checked" formControlName="agreement_name" mdInput placeholder="2.15 - Qual convênio?">
-          <md-hint class="warn" align="start" *ngIf="steps[1].controls['agreement_name'].touched || triedSend" >
-              <input-error [errors]="steps[1].controls['agreement_name'].errors" title="2.15"></input-error>
-          </md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="3" class="disability-cell" >
-        <md-icon>monetization_on</md-icon>
-        <section class="full-width" class="flagInput">
-          <p>2.13 - Gratuidade regimental?</p><br>
-          <span>Não</span>
-          <md-slide-toggle formControlName="regimental_gratuity" (change)="changeGratuity($event.checked, pronatec)">
-            Sim
-          </md-slide-toggle>
-        </section>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="5" class="disability-cell input-space">
-        <md-icon>school</md-icon>
-        <section class="flagInput">
-          <p>2.16 - Pronatec?</p><br>
-          <span>Não</span>
-          <md-slide-toggle #pronatec [checked]="student.pronatec_id>0"
-            (change)="changePronatecValue($event.checked)">
-            Sim
-          </md-slide-toggle>
-        </section>
-
-        <md-input-container class="disabilitySelect fakeHint">
-          <input style="display:none" mdInput>
-          <md-select class="disabilitySelect" formControlName="pronatec_id" placeholder="2.17 - Qual Pronatec?"
-          [class.hidden]="!pronatec.checked" [required]="pronatec.checked">
-          <md-option *ngFor="let pronatec of bdInfo.pronatec" [value]="pronatec.id">{{pronatec.description}}</md-option>
-          </md-select>
-          <md-hint class="warn" align="start" *ngIf="steps[1].controls['pronatec_id'].touched || triedSend">
-            <input-error [errors]="steps[1].controls['pronatec_id'].errors" title="2.17"></input-error>
-          </md-hint>
-        </md-input-container>
-
-      </md-grid-tile>
-
-    </md-grid-list>
-  </md-tab>
-  <!-- Second tab: end -->
-
-  <!-- Third tab: begin -->
-  <md-tab formGroupName="contato">
-    <template color="transparent" md-tab-label>
-      <md-icon *ngIf="steps[2].valid" color="primary">thumb_up</md-icon>
-      <md-icon *ngIf="!steps[2].valid" color="warn">thumb_down</md-icon>
-      CONTATO
-    </template>
-    <md-grid-list cols="4" rowHeight="100px">
-      <md-grid-tile [colspan]="3">
-        <md-icon>home</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="address" mdInput placeholder="3.1 - Endereço *" maxlength="100" #address>
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['address'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['address'].errors" title="3.1"></input-error>
-          </md-hint>
-          <md-hint align="end">{{address.value.length}} / 100</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="1" class="input-space">
-        <md-icon>filter_3</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="address_number" mdInput placeholder="3.2 - Número *" maxlength="10" #address_number>
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['address_number'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['address_number'].errors" title="3.2"></input-error>
-          </md-hint>
-          <md-hint align="end">{{address_number.value.length}} / 10</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="1">
-        <md-icon>compare_arrows</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="address_complement" mdInput placeholder="3.3 - Complemento" maxlength="50" #address_complement>
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['address_complement'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['address_complement'].errors" title="3.3"></input-error>
-          </md-hint>
-          <md-hint align="end">{{address_complement.value.length}} / 50</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="1" class="input-space">
-        <md-icon>location_on</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="address_district" mdInput placeholder="3.4 - Bairro *" maxlength="50" #address_district>
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['address_district'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['address_district'].errors" title="3.4"></input-error>
-          </md-hint>
-          <md-hint align="end">{{address_district.value.length}} / 50</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="1" class="input-space">
-       <md-icon>local_post_office</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="address_zip_code" mdInput placeholder="3.5 - CEP" [textMask]="{mask: mask.zip}" #address_zip_code>
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['address_zip_code'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['address_zip_code'].errors" title="CEP"></input-error>
-          </md-hint>
-          <md-hint align="end">{{(address_zip_code.value | getNumber).length}} / 8</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="1" class="input-space">
-        <md-icon>location_city</md-icon>
-        <md-input-container class="full-width">
-          <input mdInput class="full-width" placeholder="3.6 - Cidade *" [mdAutocomplete]="auto" formControlName="city_id">
-          <md-hint class="warn" align="start"
-              *ngIf="steps[2].controls['city_id'].touched || triedSend">
-              <input-error [errors]="steps[2].controls['city_id'].errors" title="3.6"></input-error>
-          </md-hint>
-        </md-input-container>
-        <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayAutocomplete">
-          <md-option *ngFor="let city of filteredCities | async" [value]="city">
-            {{city.state}} - {{city.description}}
-          </md-option>
-        </md-autocomplete>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="1">
-        <md-icon>phone</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="home_phone" mdInput placeholder="3.7 - Telefone residencial" [textMask]="{mask: mask.phone}" #home_phone >
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['home_phone'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['home_phone'].errors" title="3.7"></input-error>
-          </md-hint>
-          <md-hint align="end">{{(home_phone.value | getNumber).length}} / 10</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="1" class="input-space">
-        <md-icon>smartphone</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="cell_phone" mdInput placeholder="3.8 - Celular" [textMask]="{mask: mask.cell_phone, guide: false}" #cell_phone>
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['cell_phone'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['cell_phone'].errors" title="3.8"></input-error>
-          </md-hint>
-          <md-hint align="end">{{(cell_phone.value | getNumber).length}} / 11</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="1" class="input-space">
-        <md-icon>phone</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="alternative_phone" mdInput placeholder="3.9 - Telefone recado" [textMask]="{mask: mask.cell_phone, guide: false}" #alternative_phone>
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['alternative_phone'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['alternative_phone'].errors" title="3.9"></input-error>
-          </md-hint>
-          <md-hint align="end">{{(alternative_phone.value | getNumber).length}} / 11</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-      <md-grid-tile [colspan]="3">
-        <md-icon>email</md-icon>
-        <md-input-container class="full-width">
-          <input formControlName="email" mdInput placeholder="3.10 - E-mail *" maxlength="100" #email>
-          <md-hint class="warn" align="start" *ngIf="steps[2].controls['email'].touched || triedSend" >
-              <input-error [errors]="steps[2].controls['email'].errors" title="3.10"></input-error>
-          </md-hint>
-          <md-hint align="end">{{email.value.length}} / 100</md-hint>
-        </md-input-container>
-      </md-grid-tile>
-
-    </md-grid-list>
-  </md-tab>
-  <!-- Third tab: end -->
-
-  <!-- Fourth tab: begin -->
-  <md-tab formGroupName="situacao">
-    <template color="transparent"  md-tab-label>
-      <md-icon *ngIf="steps[3].valid" color="primary">thumb_up</md-icon>
-      <md-icon *ngIf="!steps[3].valid" color="warn">thumb_down</md-icon>
-      SITUAÇÃO PROFISSIONAL
-    </template>
-    <md-card formGroupName="0" >
-      <md-icon >attach_money</md-icon>
-      <section style="display: inline-block;" class="flagInput">
-        <p>4.1 - Atualmente você esta trabalhando/estagiando de forma remunerada? *</p><br>
-        <span>Não</span>
-        <md-slide-toggle #remunerado (change)="changeRemunerado($event)" formControlName="alternative_flag">
-          Sim
-        </md-slide-toggle>
-      </section>
-    </md-card>
-    <md-card [class.hiddenField]="!remunerado.checked" formGroupName="1">
-      <md-icon class="material-icons">directions_run</md-icon>
-      <div class="selectGroup" style="width:50%;display: inline-block;">
-        <md-select [required]="remunerado.checked" #situacao formControlName="alternative_id" placeholder="4.2 - Especifique abaixo sua situação profissional*" class="full-width">
-          <md-option *ngFor="let estagio of bdInfo.estagios" [value]="estagio.id">{{estagio.description}}</md-option>
-        </md-select>
-        <p class="warn" align="start" *ngIf="steps[3].controls[1].controls['alternative_id'].touched || triedSend">
-          <input-error [errors]="steps[3].controls[1].controls['alternative_id'].errors" title="Questão 4.2"></input-error>
-        </p>
-      </div>
-      <md-input-container style="padding-left: 10px; width:30%" align="left"
-                          [class.hidden]="situacao.selected?.value!=13" >
-        <input [required]="situacao.selected?.value==13" formControlName="complement" mdInput placeholder="Qual a situação?" maxlength="100">
-        <md-hint class="warn" align="start"
-          *ngIf="triedSend">
-          <input-error [errors]="steps[3].controls[1].controls['complement'].errors" title="1.8"></input-error>
-        </md-hint>
-      </md-input-container>
-    </md-card>
-    <md-card [class.hiddenField]="!remunerado.checked">
-      <md-icon>attach_money</md-icon>
-      <md-input-container formGroupName="2" style="width:50%;" class="fakeHint">
-        <input style="display:none" mdInput>
-        <md-select [required]="remunerado.checked" formControlName="alternative_id" class="full-width" placeholder="4.3 - Quanto você ganha por mês atualmente *">
-          <md-option *ngFor="let salary of bdInfo.salary" [value]="salary.value">
-              {{salary.description}} - <span *ngIf="salary.limit">até {{salary.limit*bdInfo.salaryValue | moneyMask}}</span>
-              <span *ngIf="salary.min">{{salary.min*bdInfo.salaryValue | moneyMask}}</span>
-              <span *ngIf="salary.max">até {{salary.max*bdInfo.salaryValue | moneyMask}}</span>
-              <span *ngIf="salary.exactly">{{salary.exactly*bdInfo.salaryValue | moneyMask}}</span>
-          </md-option>
-        </md-select>
-        <md-hint class="warn" align="start" *ngIf="steps[3].controls[2].controls['alternative_id'].touched || triedSend">
-          <input-error [errors]="steps[3].controls[2].controls['alternative_id'].errors" title="Questão 4.3"></input-error>
-        </md-hint>
-      </md-input-container>
-    </md-card>
-  </md-tab>
-  <!-- Fourth tab: end -->
-
-  <!-- Fifth tab: begin -->
-  <md-tab formArrayName="avaliacao">
-    <template color="transparent"  md-tab-label>
-      <md-icon *ngIf="steps[4].valid" color="primary">thumb_up</md-icon>
-      <md-icon *ngIf="!steps[4].valid" color="warn">thumb_down</md-icon>
-      AVAL. DO SENAI
-    </template>
-    <md-grid-list cols="2" formGroupName="0" rowHeight="100px">
+      <md-grid-list cols="4" rowHeight="95px">
         <md-grid-tile [colspan]="2">
-         <md-icon>thumbs_up_down</md-icon>
+          <md-icon>credit_card</md-icon>
+
+          <md-input-container align="start" class="full-width">
+            <input mdInput #cpf formControlName="cpf_number" placeholder="Informe o CPF *"
+            [textMask]="{mask: mask.cpf}">
+            <md-hint class="warn" align="start" *ngIf="steps[0].controls['cpf_number'].touched || triedSend" >
+                <input-error [errors]="steps[0].controls['cpf_number'].errors" title="CPF"></input-error>
+            </md-hint>
+            <md-hint align="end">{{(cpf.value | getNumber).length}} / 11</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2" class="disability-cell">
+          <button md-icon-button type="button" #pesquisar (click)="getStudentIntegratedBase(cpf.value, pesquisar)" mdTooltip="Procurar"><md-icon class="md-toolbar">search</md-icon></button>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2">
+          <md-icon>account_box</md-icon>
+          <md-input-container class="full-width">
+            <input #name mdInput formControlName="name" placeholder="1.1 - Nome do aluno *" maxlength="100">
+            <md-hint class="warn" align="start"
+                *ngIf="steps[0].controls['name'].touched || triedSend">
+                <input-error [errors]="steps[0].controls['name'].errors" title="1.1"></input-error>
+            </md-hint>
+            <md-hint align="end">{{name.value.length}} / 100</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile class="input-space" [colspan]="2">
+          <md-icon>wc</md-icon>
           <md-input-container class="full-width fakeHint">
-          <input style="display:none" mdInput>
-            <md-radio-group formControlName="alternative_id" class="example-section">5.1 - Qual é o seu nível de satisfação com o SENAI? Dê uma nota de 0 a 10 onde (0: muito insatisfeito; 10: muito satisfeito)<br>
-              <md-radio-button class="radio-before" value="24">0</md-radio-button>
-              <md-radio-button class="radio-before" value="25">1</md-radio-button>
-              <md-radio-button class="radio-before" value="26">2</md-radio-button>
-              <md-radio-button class="radio-before" value="27">3</md-radio-button>
-              <md-radio-button class="radio-before" value="28">4</md-radio-button>
-              <md-radio-button class="radio-before" value="29">5</md-radio-button>
-              <md-radio-button class="radio-before" value="30">6</md-radio-button>
-              <md-radio-button class="radio-before" value="31">7</md-radio-button>
-              <md-radio-button class="radio-before" value="32">8</md-radio-button>
-              <md-radio-button class="radio-before" value="33">9</md-radio-button>
-              <md-radio-button class="radio-before" value="34">10</md-radio-button>
+            <input style="display:none" mdInput>
+            <md-radio-group formControlName="gender">
+              1.2 - Selecione o sexo *<br>
+              <md-radio-button *ngFor="let gender of bdInfo.genders" class="radio-before"
+                                [value]="gender.id">{{gender.description}}</md-radio-button>
             </md-radio-group>
-            <md-hint class="warn" align="start" *ngIf="steps[4].controls[0].controls['alternative_id'].touched || triedSend">
-              <input-error [errors]="steps[4].controls[0].controls['alternative_id'].errors" title="Questão 5.1"></input-error>
+            <md-hint class="warn" align="start"
+              *ngIf="steps[0].controls['gender'].touched || triedSend">
+              <input-error [errors]="steps[0].controls['gender'].errors" title="Sexo"></input-error>
             </md-hint>
           </md-input-container>
         </md-grid-tile>
-    </md-grid-list>
-  </md-tab>
-  <!-- Fifth tab: end -->
 
-</md-tab-group>
+        <md-grid-tile [colspan]="2">
+          <md-icon>date_range</md-icon>
+          <md-input-container style="width:100%">
+            <input mdInput #birth class="full-width"
+            [textMask]="{mask: mask.date, pipe: autoCorrectedDatePipe}"
+            placeholder="1.3 - Data de nascimento *" formControlName="birth_date" (blur)="'OI'">
+            <md-hint class="warn" align="start"
+                *ngIf="steps[0].controls['birth_date'].touched || triedSend">
+                <input-error [errors]="steps[0].controls['birth_date'].errors" title="1.3"></input-error>
+            </md-hint>
+            <md-hint align="end">{{(birth.value | getNumber).length}} / 8</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2" class="input-space">
+          <md-icon>fingerprint</md-icon>
+          <md-input-container class="full-width">
+            <input mdInput #rg formControlName="rg_number" placeholder="1.4 - Informe o RG *" maxlength="20">
+            <md-hint class="warn" align="start"
+                *ngIf="steps[0].controls['rg_number'].touched || triedSend">
+                <input-error [errors]="steps[0].controls['rg_number'].errors" title="1.4"></input-error>
+            </md-hint>
+            <md-hint align="end">{{(rg.value | getNumber).length}} / 20</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2">
+          <md-icon>school</md-icon>
+          <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+            1.5 - Estudou/estuda em que tipo de escola? *<br>
+            <md-radio-group formControlName="origin_id">
+              <md-radio-button class="radio-before" value="1">Escola Pública</md-radio-button>
+              <md-radio-button class="radio-before" value="2">Escola Particular</md-radio-button>
+            </md-radio-group>
+            <md-hint class="warn" align="start"
+              *ngIf="steps[0].controls['origin_id'].touched || triedSend">
+              <input-error [errors]="steps[0].controls['origin_id'].errors" title="1.5"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2" class="input-space">
+          <md-icon>face</md-icon>
+          <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+            <md-select class="full-width" formControlName="ethnicity_id" placeholder="1.6 - Cor / Etnia *">
+              <md-option *ngFor="let ethnicity of bdInfo.ethnicities" [value]="ethnicity.id">{{ethnicity.description}}</md-option>
+            </md-select>
+            <md-hint class="warn" align="start"
+                *ngIf="steps[0].controls['ethnicity_id'].touched || triedSend">
+                <input-error [errors]="steps[0].controls['ethnicity_id'].errors" title="1.6"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile class="disability-cell" [colspan]="4">
+          <md-icon>accessible</md-icon>
+          <section class="flagInput">
+            <p>1.7 - Possui alguma deficiência (PcD)? *</p><br>
+            <span>Não</span>
+            <md-slide-toggle #disabilty [checked]="student.disability_id>0 && student.disability_id!=9"
+              (change)="changeDisabled(steps[0], 'disability_id', $event.checked)">
+              Sim
+            </md-slide-toggle>
+          </section>
+          <md-input-container align="left" class="fakeHint disability disabilitySelect"
+            [class.hidden]="!disabilty.checked" >
+            <input style="display:none" mdInput>
+            <md-select placeholder="1.8 - Qual deficiência?"
+                      formControlName="disability_id"
+                      [required]="disabilty.checked">
+              <md-option *ngFor="let disability of bdInfo.disabilities"
+                          [value]="disability.id">{{disability.description}}</md-option>
+            </md-select>
+            <md-hint class="warn" align="start"
+              *ngIf="triedSend">
+              <input-error [errors]="steps[0].controls['disability_id'].errors" title="1.8"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+      </md-grid-list>
+    </md-tab>
+    <!-- First tab: end -->
+
+    <!-- Second tab: begin -->
+    <md-tab formGroupName="curso">
+      <template color="transparent"  md-tab-label>
+        <md-icon *ngIf="steps[1].valid" color="primary">thumb_up</md-icon>
+        <md-icon *ngIf="!steps[1].valid" color="warn">thumb_down</md-icon>
+        CURSO
+      </template>
+      <md-grid-list cols="8" rowHeight="100px">
+        <md-grid-tile [colspan]="2">
+          <md-icon>date_range</md-icon>
+          <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+            <md-select class="full-width" formControlName="start_month" placeholder="2.1 - Mês de início *">
+              <md-option *ngFor="let month of bdInfo.months" [value]="month.id">{{month.valueView}}</md-option>
+            </md-select>
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['start_month'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['start_month'].errors" title="Mês Início"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2" class="input-space">
+          <md-icon>date_range</md-icon>
+          <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+            <md-select class="full-width" formControlName="start_year" placeholder="2.2 - Ano de início *">
+              <md-option *ngFor="let year of bdInfo.years" [value]="year">{{year}}</md-option>
+            </md-select>
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['start_year'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['start_year'].errors" title="2.2"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2" class="input-space">
+          <md-icon>date_range</md-icon>
+          <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+            <md-select class="full-width" formControlName="end_month" placeholder="2.3 - Mês de término *">
+              <md-option *ngFor="let month of bdInfo.months" [value]="month.id">{{month.valueView}}</md-option>
+            </md-select>
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['end_month'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['end_month'].errors" title="2.3"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2" class="input-space">
+          <md-icon>date_range</md-icon>
+          <md-input-container class="full-width">
+            <input mdInput disabled value="2017" placeholder="2.4 - Ano Termino">
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="4">
+          <md-icon>class</md-icon>
+          <md-input-container class="full-width">
+            <input mdInput class="full-width" placeholder="2.5 - Selecione o curso *" [mdAutocomplete]="autoCourse" formControlName="course_id">
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['course_id'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['course_id'].errors" title="2.5"></input-error>
+            </md-hint>
+          </md-input-container>
+          <md-autocomplete #autoCourse="mdAutocomplete" [displayWith]="displayAutocomplete">
+            <md-option *ngFor="let course of filteredCourses | async" [value]="course">
+              {{course.description}}
+            </md-option>
+          </md-autocomplete>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="4" class="input-space">
+          <md-icon>location_on</md-icon>
+          <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+            <md-select formControlName="regional" class="full-width" (change)="changeUnit()"  placeholder="2.6 - Selecione o DR *">
+              <md-option *ngFor="let regional of filteredRegional" [value]="regional.sigla" >{{regional.sigla}} - {{regional.description}}</md-option>
+            </md-select>
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['regional'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['regional'].errors" title="2.6"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="4">
+          <md-icon>business</md-icon>
+          <md-input-container class="full-width">
+            <input mdInput class="full-width" placeholder="2.7 - Selecione a Unidade *" [mdAutocomplete]="autoUnit" formControlName="unit_id">
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['unit_id'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['unit_id'].errors" title="2.7"></input-error>
+            </md-hint>
+          </md-input-container>
+          <md-autocomplete #autoUnit="mdAutocomplete" [displayWith]="displayAutocomplete">
+            <md-option *ngFor="let unit of filteredUnits | async" [value]="unit">
+              {{unit.description}}
+            </md-option>
+          </md-autocomplete>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="4" class="input-space">
+          <md-icon>list</md-icon>
+          <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+            <md-select class="full-width" formControlName="modality_id" placeholder="2.8 - Modalidade *">
+              <md-option *ngFor="let modality of modalities" [value]="modality.id">{{modality.description}}</md-option>
+            </md-select>
+
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['modality_id'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['modality_id'].errors" title="2.8"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="3">
+          <md-icon>language</md-icon>
+          <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+            <md-select class="full-width" formControlName="area_id" placeholder="2.9 - Área tecnológica *">
+              <md-option *ngFor="let area of bdInfo.areas" [value]="area.id">{{area.description}}</md-option>
+            </md-select>
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['area_id'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['area_id'].errors" title="2.9"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="3" class="input-space">
+          <md-icon>work</md-icon>
+          <md-input-container class="full-width">
+            <input mdInput class="full-width" placeholder="2.9 - Ocupação *" [mdAutocomplete]="autoOccupation" formControlName="occupation_id">
+            <md-hint class="warn" align="start"
+                *ngIf="steps[1].controls['occupation_id'].touched || triedSend">
+                <input-error [errors]="steps[1].controls['occupation_id'].errors" title="2.9"></input-error>
+            </md-hint>
+          </md-input-container>
+          <md-autocomplete #autoOccupation="mdAutocomplete" [displayWith]="displayAutocomplete">
+            <md-option *ngFor="let occupation of filteredOccupations | async" [value]="occupation">
+              {{occupation.code}} - {{occupation.description}}
+            </md-option>
+          </md-autocomplete>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="2" class="input-space">
+          <md-icon>people_outline</md-icon>
+          <md-input-container  align="start" class="full-width">
+            <input mdInput #class formControlName="class" placeholder="2.11 Turma *" maxlength="20">
+            <md-hint class="warn" align="start" *ngIf="steps[1].controls['class'].touched || triedSend" >
+                <input-error [errors]="steps[1].controls['class'].errors" title="2.11"></input-error>
+            </md-hint>
+            <md-hint align="end">{{(class.value | getNumber).length}} / 20</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="3" class="disability-cell">
+          <md-icon>school</md-icon>
+          <section class="full-width" class="flagInput">
+            <p>2.12 - Educação à distância - EAD?</p><br>
+            <span>Não</span>
+            <md-slide-toggle formControlName="distance_education">
+              Sim
+            </md-slide-toggle>
+          </section>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="5" class="disability-cell input-space">
+          <md-icon>location_city</md-icon>
+          <section class="flagInput">
+            <p>2.14 - Convênio?</p><br>
+            <span>Não</span>
+            <md-slide-toggle #agreement formControlName="agreement"
+                (change)="changeDisabled(steps[1], 'agreement_name', $event.checked)">
+              Sim
+            </md-slide-toggle>
+          </section>
+          <md-input-container class="disabilitySelect" [class.hidden]="!agreement.checked">
+            <input [required]="agreement.checked" formControlName="agreement_name" mdInput placeholder="2.15 - Qual convênio?">
+            <md-hint class="warn" align="start" *ngIf="steps[1].controls['agreement_name'].touched || triedSend" >
+                <input-error [errors]="steps[1].controls['agreement_name'].errors" title="2.15"></input-error>
+            </md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="3" class="disability-cell" >
+          <md-icon>monetization_on</md-icon>
+          <section class="full-width" class="flagInput">
+            <p>2.13 - Gratuidade regimental?</p><br>
+            <span>Não</span>
+            <md-slide-toggle formControlName="regimental_gratuity" (change)="changeGratuity($event.checked, pronatec)">
+              Sim
+            </md-slide-toggle>
+          </section>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="5" class="disability-cell input-space">
+          <md-icon>school</md-icon>
+          <section class="flagInput">
+            <p>2.16 - Pronatec?</p><br>
+            <span>Não</span>
+            <md-slide-toggle #pronatec [checked]="student.pronatec_id>0"
+              (change)="changePronatecValue($event.checked)">
+              Sim
+            </md-slide-toggle>
+          </section>
+
+          <md-input-container class="disabilitySelect fakeHint">
+            <input style="display:none" mdInput>
+            <md-select class="disabilitySelect" formControlName="pronatec_id" placeholder="2.17 - Qual Pronatec?"
+            [class.hidden]="!pronatec.checked" [required]="pronatec.checked">
+            <md-option *ngFor="let pronatec of bdInfo.pronatec" [value]="pronatec.id">{{pronatec.description}}</md-option>
+            </md-select>
+            <md-hint class="warn" align="start" *ngIf="steps[1].controls['pronatec_id'].touched || triedSend">
+              <input-error [errors]="steps[1].controls['pronatec_id'].errors" title="2.17"></input-error>
+            </md-hint>
+          </md-input-container>
+
+        </md-grid-tile>
+
+      </md-grid-list>
+    </md-tab>
+    <!-- Second tab: end -->
+
+    <!-- Third tab: begin -->
+    <md-tab formGroupName="contato">
+      <template color="transparent" md-tab-label>
+        <md-icon *ngIf="steps[2].valid" color="primary">thumb_up</md-icon>
+        <md-icon *ngIf="!steps[2].valid" color="warn">thumb_down</md-icon>
+        CONTATO
+      </template>
+      <md-grid-list cols="4" rowHeight="100px">
+        <md-grid-tile [colspan]="3">
+          <md-icon>home</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="address" mdInput placeholder="3.1 - Endereço *" maxlength="100" #address>
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['address'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['address'].errors" title="3.1"></input-error>
+            </md-hint>
+            <md-hint align="end">{{address.value.length}} / 100</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1" class="input-space">
+          <md-icon>filter_3</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="address_number" mdInput placeholder="3.2 - Número *" maxlength="10" #address_number>
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['address_number'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['address_number'].errors" title="3.2"></input-error>
+            </md-hint>
+            <md-hint align="end">{{address_number.value.length}} / 10</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1">
+          <md-icon>compare_arrows</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="address_complement" mdInput placeholder="3.3 - Complemento" maxlength="50" #address_complement>
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['address_complement'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['address_complement'].errors" title="3.3"></input-error>
+            </md-hint>
+            <md-hint align="end">{{address_complement.value.length}} / 50</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1" class="input-space">
+          <md-icon>location_on</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="address_district" mdInput placeholder="3.4 - Bairro *" maxlength="50" #address_district>
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['address_district'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['address_district'].errors" title="3.4"></input-error>
+            </md-hint>
+            <md-hint align="end">{{address_district.value.length}} / 50</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1" class="input-space">
+        <md-icon>local_post_office</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="address_zip_code" mdInput placeholder="3.5 - CEP" [textMask]="{mask: mask.zip}" #address_zip_code>
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['address_zip_code'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['address_zip_code'].errors" title="CEP"></input-error>
+            </md-hint>
+            <md-hint align="end">{{(address_zip_code.value | getNumber).length}} / 8</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1" class="input-space">
+          <md-icon>location_city</md-icon>
+          <md-input-container class="full-width">
+            <input mdInput class="full-width" placeholder="3.6 - Cidade *" [mdAutocomplete]="auto" formControlName="city_id">
+            <md-hint class="warn" align="start"
+                *ngIf="steps[2].controls['city_id'].touched || triedSend">
+                <input-error [errors]="steps[2].controls['city_id'].errors" title="3.6"></input-error>
+            </md-hint>
+          </md-input-container>
+          <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayAutocomplete">
+            <md-option *ngFor="let city of filteredCities | async" [value]="city">
+              {{city.state}} - {{city.description}}
+            </md-option>
+          </md-autocomplete>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1">
+          <md-icon>phone</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="home_phone" mdInput placeholder="3.7 - Telefone residencial" [textMask]="{mask: mask.phone}" #home_phone >
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['home_phone'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['home_phone'].errors" title="3.7"></input-error>
+            </md-hint>
+            <md-hint align="end">{{(home_phone.value | getNumber).length}} / 10</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1" class="input-space">
+          <md-icon>smartphone</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="cell_phone" mdInput placeholder="3.8 - Celular" [textMask]="{mask: mask.cell_phone, guide: false}" #cell_phone>
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['cell_phone'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['cell_phone'].errors" title="3.8"></input-error>
+            </md-hint>
+            <md-hint align="end">{{(cell_phone.value | getNumber).length}} / 11</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="1" class="input-space">
+          <md-icon>phone</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="alternative_phone" mdInput placeholder="3.9 - Telefone recado" [textMask]="{mask: mask.cell_phone, guide: false}" #alternative_phone>
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['alternative_phone'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['alternative_phone'].errors" title="3.9"></input-error>
+            </md-hint>
+            <md-hint align="end">{{(alternative_phone.value | getNumber).length}} / 11</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+        <md-grid-tile [colspan]="3">
+          <md-icon>email</md-icon>
+          <md-input-container class="full-width">
+            <input formControlName="email" mdInput placeholder="3.10 - E-mail *" maxlength="100" #email>
+            <md-hint class="warn" align="start" *ngIf="steps[2].controls['email'].touched || triedSend" >
+                <input-error [errors]="steps[2].controls['email'].errors" title="3.10"></input-error>
+            </md-hint>
+            <md-hint align="end">{{email.value.length}} / 100</md-hint>
+          </md-input-container>
+        </md-grid-tile>
+
+      </md-grid-list>
+    </md-tab>
+    <!-- Third tab: end -->
+
+    <!-- Fourth tab: begin -->
+    <md-tab formGroupName="situacao">
+      <template color="transparent"  md-tab-label>
+        <md-icon *ngIf="steps[3].valid" color="primary">thumb_up</md-icon>
+        <md-icon *ngIf="!steps[3].valid" color="warn">thumb_down</md-icon>
+        SITUAÇÃO PROFISSIONAL
+      </template>
+      <md-card formGroupName="0" >
+        <md-icon >attach_money</md-icon>
+        <section style="display: inline-block;" class="flagInput">
+          <p>4.1 - Atualmente você esta trabalhando/estagiando de forma remunerada? *</p><br>
+          <span>Não</span>
+          <md-slide-toggle #remunerado (change)="changeRemunerado($event)" formControlName="alternative_flag">
+            Sim
+          </md-slide-toggle>
+        </section>
+      </md-card>
+      <md-card [class.hiddenField]="!remunerado.checked" formGroupName="1">
+        <md-icon class="material-icons">directions_run</md-icon>
+        <div class="selectGroup" style="width:50%;display: inline-block;">
+          <md-select [required]="remunerado.checked" #situacao formControlName="alternative_id" placeholder="4.2 - Especifique abaixo sua situação profissional*" class="full-width">
+            <md-option *ngFor="let estagio of bdInfo.estagios" [value]="estagio.id">{{estagio.description}}</md-option>
+          </md-select>
+          <p class="warn" align="start" *ngIf="steps[3].controls[1].controls['alternative_id'].touched || triedSend">
+            <input-error [errors]="steps[3].controls[1].controls['alternative_id'].errors" title="Questão 4.2"></input-error>
+          </p>
+        </div>
+        <md-input-container style="padding-left: 10px; width:30%" align="left"
+                            [class.hidden]="situacao.selected?.value!=13" >
+          <input [required]="situacao.selected?.value==13" formControlName="complement" mdInput placeholder="Qual a situação?" maxlength="100">
+          <md-hint class="warn" align="start"
+            *ngIf="triedSend">
+            <input-error [errors]="steps[3].controls[1].controls['complement'].errors" title="1.8"></input-error>
+          </md-hint>
+        </md-input-container>
+      </md-card>
+      <md-card [class.hiddenField]="!remunerado.checked">
+        <md-icon>attach_money</md-icon>
+        <md-input-container formGroupName="2" style="width:50%;" class="fakeHint">
+          <input style="display:none" mdInput>
+          <md-select [required]="remunerado.checked" formControlName="alternative_id" class="full-width" placeholder="4.3 - Quanto você ganha por mês atualmente *">
+            <md-option *ngFor="let salary of bdInfo.salary" [value]="salary.value">
+                {{salary.description}} - <span *ngIf="salary.limit">até {{salary.limit*bdInfo.salaryValue | moneyMask}}</span>
+                <span *ngIf="salary.min">{{salary.min*bdInfo.salaryValue | moneyMask}}</span>
+                <span *ngIf="salary.max">até {{salary.max*bdInfo.salaryValue | moneyMask}}</span>
+                <span *ngIf="salary.exactly">{{salary.exactly*bdInfo.salaryValue | moneyMask}}</span>
+            </md-option>
+          </md-select>
+          <md-hint class="warn" align="start" *ngIf="steps[3].controls[2].controls['alternative_id'].touched || triedSend">
+            <input-error [errors]="steps[3].controls[2].controls['alternative_id'].errors" title="Questão 4.3"></input-error>
+          </md-hint>
+        </md-input-container>
+      </md-card>
+    </md-tab>
+    <!-- Fourth tab: end -->
+
+    <!-- Fifth tab: begin -->
+    <md-tab formArrayName="avaliacao">
+      <template color="transparent"  md-tab-label>
+        <md-icon *ngIf="steps[4].valid" color="primary">thumb_up</md-icon>
+        <md-icon *ngIf="!steps[4].valid" color="warn">thumb_down</md-icon>
+        AVAL. DO SENAI
+      </template>
+      <md-grid-list cols="2" formGroupName="0" rowHeight="100px">
+          <md-grid-tile [colspan]="2">
+          <md-icon>thumbs_up_down</md-icon>
+            <md-input-container class="full-width fakeHint">
+            <input style="display:none" mdInput>
+              <md-radio-group formControlName="alternative_id" class="example-section">5.1 - Qual é o seu nível de satisfação com o SENAI? Dê uma nota de 0 a 10 onde (0: muito insatisfeito; 10: muito satisfeito)<br>
+                <md-radio-button class="radio-before" value="24">0</md-radio-button>
+                <md-radio-button class="radio-before" value="25">1</md-radio-button>
+                <md-radio-button class="radio-before" value="26">2</md-radio-button>
+                <md-radio-button class="radio-before" value="27">3</md-radio-button>
+                <md-radio-button class="radio-before" value="28">4</md-radio-button>
+                <md-radio-button class="radio-before" value="29">5</md-radio-button>
+                <md-radio-button class="radio-before" value="30">6</md-radio-button>
+                <md-radio-button class="radio-before" value="31">7</md-radio-button>
+                <md-radio-button class="radio-before" value="32">8</md-radio-button>
+                <md-radio-button class="radio-before" value="33">9</md-radio-button>
+                <md-radio-button class="radio-before" value="34">10</md-radio-button>
+              </md-radio-group>
+              <md-hint class="warn" align="start" *ngIf="steps[4].controls[0].controls['alternative_id'].touched || triedSend">
+                <input-error [errors]="steps[4].controls[0].controls['alternative_id'].errors" title="Questão 5.1"></input-error>
+              </md-hint>
+            </md-input-container>
+          </md-grid-tile>
+      </md-grid-list>
+    </md-tab>
+    <!-- Fifth tab: end -->
+
+  </md-tab-group>
 
 
-<md-toolbar class="formActions" color="transparent">
-    <button md-raised-button color="primary" type="submit"
-            [disabled]="!canSave" [class.button-disabled]="!form.valid" *ngIf="(user?.permissions[0].create && !checkIfUpdating) || (checkIfUpdating && user?.permissions[0].update)">
-            SALVAR <md-icon>send</md-icon>
-    </button>
-    <button md-raised-button color="warn" routerLink="../" type="button" *ngIf="(user?.permissions[0].create && !checkIfUpdating) || (checkIfUpdating && user?.permissions[0].update)">CANCELAR <md-icon>close</md-icon>
-    </button>
-    <button md-raised-button type="reset" *ngIf="(user?.permissions[0].create && !checkIfUpdating) || (checkIfUpdating && user?.permissions[0].update)">LIMPAR <md-icon>restore</md-icon>
-    </button>
-    <span class="toolbar-spacer"></span>
-    <button md-icon-button class="previus-btn md-icon-button" (click)="changedTabIndex({index: this.formPagination.index-1})" type="button" *ngIf="formPagination.index!=0" routerLink="."><md-icon class="md-toolbar grey">keyboard_arrow_left</md-icon></button>
-    <button md-icon-button class="md-icon-button" (click)="changedTabIndex({index: this.formPagination.index+1})" type="button"*ngIf="formPagination.index!=formPagination.maxIndex" routerLink="."><md-icon class="md-toolbar grey">keyboard_arrow_right</md-icon></button>
-</md-toolbar>
-</form>
+  <md-toolbar class="formActions" color="transparent">
+      <button md-raised-button color="primary" type="submit"
+              [disabled]="!canSave" [class.button-disabled]="!form.valid" *ngIf="(user?.permissions[0].create && !checkIfUpdating) || (checkIfUpdating && user?.permissions[0].update)">
+              SALVAR <md-icon>send</md-icon>
+      </button>
+      <button md-raised-button color="warn" routerLink="../" type="button" *ngIf="(user?.permissions[0].create && !checkIfUpdating) || (checkIfUpdating && user?.permissions[0].update)">CANCELAR <md-icon>close</md-icon>
+      </button>
+      <button md-raised-button type="reset" *ngIf="(user?.permissions[0].create && !checkIfUpdating) || (checkIfUpdating && user?.permissions[0].update)">LIMPAR <md-icon>restore</md-icon>
+      </button>
+      <span class="toolbar-spacer"></span>
+      <button md-icon-button class="previus-btn md-icon-button" (click)="changedTabIndex({index: this.formPagination.index-1})" type="button" *ngIf="formPagination.index!=0" routerLink="."><md-icon class="md-toolbar grey">keyboard_arrow_left</md-icon></button>
+      <button md-icon-button class="md-icon-button" (click)="changedTabIndex({index: this.formPagination.index+1})" type="button"*ngIf="formPagination.index!=formPagination.maxIndex" routerLink="."><md-icon class="md-toolbar grey">keyboard_arrow_right</md-icon></button>
+  </md-toolbar>
+  </form>
+</md-card>

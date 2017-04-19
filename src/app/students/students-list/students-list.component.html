@@ -1,163 +1,165 @@
-<md-toolbar class="title-form">
-  <md-icon *ngIf="isSearch">search</md-icon>
-  <md-input-container class="fakeHint" floatPlaceholder="never" *ngIf="isSearch" style="width: 100%;">
-    <input id="search" autofocus mdInput #inputSearch placeholder="Pesquisar" (input)="changeSearch($event.target.value)">
-  </md-input-container>
-  <h4 *ngIf="!isSearch">{{title}} - FASE 1</h4>
-  <span class="toolbar-spacer"></span>
-  <!--<button color="accent" md-raised-button mdTooltip="Adicionar Concluinte" class="add" routerLink="add">
-    Adicionar Concluinte
-  </button>-->
-  <button md-icon-button mdTooltip="Filtrar" (click)="this.isSearch = true;" *ngIf="!isSearch" (click)="focus()">
-    <md-icon>search</md-icon>
-  </button>
-
-  <button md-icon-button mdTooltip="Limpar busca" (click)="clearSearch()" *ngIf="isSearch">
-    <md-icon>close</md-icon>
-  </button>
-
-  <button md-icon-button mdTooltip="Deletar" (click)="deleteStudents()" *ngIf="selectedStudents.length>0">
-    <md-icon>delete</md-icon>
-  </button>
-
-  <button md-icon-button [mdMenuTriggerFor]="listMenu" mdTooltip="Mais opções">
-    <md-icon>more_vert</md-icon>
-  </button>
-  <md-menu #listMenu="mdMenu">
-
-    <a href="assets/download/formulario.docx" download md-menu-item>
-      <md-icon>file_download</md-icon>
-      <span>Baixar Formulário</span>
-    </a>
-    <a [href]="urlToNotionManual" target="_blank" md-menu-item>
-      <md-icon>help_outline</md-icon>
-      <span>Ajuda</span>
-    </a>
-  </md-menu>
-</md-toolbar>
-<table class="table">
-  <thead>
-    <tr>
-      <th>
-         <md-checkbox #inputSelectAll (change)="toogleSelectedAll($event.checked)" [disabled]="!user?.permissions[0].delete"></md-checkbox>
-      </th>
-      <th [class.td-sort]="sort.field == 'name'" (click)="changeSortAndOrder('name')">
-        <a mdTooltip="Ordenar pelo nome">
-          <span>Nome</span>
-          <md-icon *ngIf="sort.order == 'asc' && sort.field == 'name'">arrow_upward</md-icon>
-          <md-icon *ngIf="sort.order == 'desc' && sort.field == 'name'">arrow_downward</md-icon>
-        </a>
-      </th>
-      <th class="td-right" [class.td-sort]="sort.field == 'id'" (click)="changeSortAndOrder('id')">
-        <a  mdTooltip="Ordenar pelo COD">
-          <span>COD</span>
-          <md-icon *ngIf="sort.order == 'asc' && sort.field == 'id'">arrow_upward</md-icon>
-          <md-icon *ngIf="sort.order == 'desc' && sort.field == 'id'">arrow_downward</md-icon>
-        </a>
-      </th>
-      <th [class.td-sort]="sort.field == 'unit'" (click)="changeSortAndOrder('unit')">
-        <a mdTooltip="Ordenar pela Unidade">
-          <span>Unidade</span>
-          <md-icon *ngIf="sort.order == 'asc' && sort.field == 'unit'">arrow_upward</md-icon>
-          <md-icon *ngIf="sort.order == 'desc' && sort.field == 'unit'">arrow_downward</md-icon>
-        </a>
-      </th>
-      <th [class.td-sort]="sort.field == 'modality'" (click)="changeSortAndOrder('modality')">
-        <a mdTooltip="Ordenar pela modalidade">
-          <span>Modalidade</span>
-          <md-icon *ngIf="sort.order == 'asc' && sort.field == 'modality'">arrow_upward</md-icon>
-          <md-icon *ngIf="sort.order == 'desc' && sort.field == 'modality'">arrow_downward</md-icon>
-        </a>
-      </th>
-      <th [class.td-sort]="sort.field == 'course'" (click)="changeSortAndOrder('course')">
-        <a mdTooltip="Ordenar pelo curso">
-          <span>Curso</span>
-          <md-icon *ngIf="sort.order == 'asc' && sort.field == 'course'">arrow_upward</md-icon>
-          <md-icon *ngIf="sort.order == 'desc' && sort.field == 'course'">arrow_downward</md-icon>
-        </a>
-      </th>
-      <th class="td-right" [class.td-sort]="sort.field == 'class'" (click)="changeSortAndOrder('class')">
-        <a  mdTooltip="Ordenar pela turma">
-          <span>Turma</span>
-          <md-icon *ngIf="sort.order == 'asc' && sort.field == 'class'">arrow_upward</md-icon>
-          <md-icon *ngIf="sort.order == 'desc' && sort.field == 'class'">arrow_downward</md-icon>
-        </a>
-      </th>
-      <th class="td-right" [class.td-sort]="sort.field == 'regional'" (click)="changeSortAndOrder('regional')">
-        <a  mdTooltip="Ordenar pela UF">
-          <span>UF</span>
-          <md-icon *ngIf="sort.order == 'asc' && sort.field == 'regional'">arrow_upward</md-icon>
-          <md-icon *ngIf="sort.order == 'desc' && sort.field == 'regional'">arrow_downward</md-icon>
-        </a>
-      </th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngIf="isLoading">
-      <td class="loadingTable" colspan="9"><md-progress-bar mode="indeterminate"></md-progress-bar></td>
-    </tr>
-    <tr *ngIf="!isLoading && students.length==0" >
-      <td class="feedbackTable" colspan="9">Nenhum concluinte encontrado</td>
-    </tr>
-    <tr *ngFor="let student of students">
-      <td>
-         <md-checkbox [(ngModel)]="student.checked" (change)="toogleSelected($event.checked, student)" [disabled]="!user?.permissions[0].delete"></md-checkbox>
-      </td>
-      <td>{{student.name}}</td>
-      <td>{{student.id}}</td>
-      <td>{{student.unit}}</td>
-      <td>{{student.modality}}</td>
-      <td>{{student.course}}</td>
-      <td>{{student.class}}</td>
-      <td>{{student.regional}}</td>
-      <td>
-        <button md-icon-button (click)="edit(student.id)" class="button-edit" mdTooltip="Editar"
-                *ngIf="user?.permissions[0].update">
-          <md-icon>edit</md-icon>
-        </button>
-
-        <button md-icon-button (click)="edit(student.id)" class="button-edit" mdTooltip="Visualizar"
-                *ngIf="user?.permissions[0].view && !user?.permissions[0].create && !user?.permissions[0].update">
-          <md-icon>remove_red_eyes</md-icon>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<md-toolbar>
-  <span class="pagination-spacer"></span>
-  <div class="pagination-info">
-    <label>
-      Página:
-      <button [disabled]="this.infoApi?.total<=0" md-icon-button class="md-icon-button" [mdMenuTriggerFor]="pageNumber" mdTooltip="Número da página">
-        {{ apiPage }}<md-icon class="md-toolbar grey">arrow_drop_down</md-icon>
-      </button>
-    </label>
-    <md-menu #pageNumber="mdMenu">
-      <button *ngFor="let page of (this.infoApi?.last_page | arrayGenerator)"  (click)="changePage(page);" md-menu-item>
-        <span>{{page}}</span>
-      </button>
-    </md-menu>
-    <label>
-      Concluintes por página:
-      <button class="md-icon-button" md-icon-button [mdMenuTriggerFor]="perPageSelect" mdTooltip="Concluintes">
-        {{ apiLimit }}<md-icon class="md-toolbar grey">arrow_drop_down</md-icon>
-      </button>
-    </label>
-    <md-menu #perPageSelect="mdMenu">
-      <button *ngFor="let value of arrayPagination" (click)="changeLimit(value)" md-menu-item><span>{{value}}</span></button>
-    </md-menu>
-    <span>
-      {{ infoApi?.from | showNumber}} - {{ infoApi?.to | showNumber}} de {{ infoApi?.total | showNumber}}
-    </span>
-    <button *ngIf="(apiPage<=this.infoApi?.last_page) && apiPage>1" md-icon-button class="previus-btn md-icon-button"
-            (click)="nextPreviousPage(-1)" mdTooltip="Anterior">
-      <md-icon class="md-toolbar grey">keyboard_arrow_left</md-icon>
+<md-card class="card-content">
+  <md-toolbar class="title-form">
+    <md-icon *ngIf="isSearch">search</md-icon>
+    <md-input-container class="fakeHint" floatPlaceholder="never" *ngIf="isSearch" style="width: 100%;">
+      <input id="search" autofocus mdInput #inputSearch placeholder="Pesquisar" (input)="changeSearch($event.target.value)">
+    </md-input-container>
+    <h4 *ngIf="!isSearch">{{title}} - FASE 1</h4>
+    <span class="toolbar-spacer"></span>
+    <!--<button color="accent" md-raised-button mdTooltip="Adicionar Concluinte" class="add" routerLink="add">
+      Adicionar Concluinte
+    </button>-->
+    <button md-icon-button mdTooltip="Filtrar" (click)="this.isSearch = true;" *ngIf="!isSearch" (click)="focus()">
+      <md-icon>search</md-icon>
     </button>
-    <button *ngIf="apiPage<this.infoApi?.last_page" md-icon-button class="md-icon-button"
-            (click)="nextPreviousPage(1)" mdTooltip="Próximo">
-      <md-icon class="md-toolbar grey">keyboard_arrow_right</md-icon>
+
+    <button md-icon-button mdTooltip="Limpar busca" (click)="clearSearch()" *ngIf="isSearch">
+      <md-icon>close</md-icon>
     </button>
-  </div>
-</md-toolbar>
+
+    <button md-icon-button mdTooltip="Deletar" (click)="deleteStudents()" *ngIf="selectedStudents.length>0">
+      <md-icon>delete</md-icon>
+    </button>
+
+    <button md-icon-button [mdMenuTriggerFor]="listMenu" mdTooltip="Mais opções">
+      <md-icon>more_vert</md-icon>
+    </button>
+    <md-menu #listMenu="mdMenu">
+
+      <a href="assets/download/formulario.docx" download md-menu-item>
+        <md-icon>file_download</md-icon>
+        <span>Baixar Formulário</span>
+      </a>
+      <a [href]="urlToNotionManual" target="_blank" md-menu-item>
+        <md-icon>help_outline</md-icon>
+        <span>Ajuda</span>
+      </a>
+    </md-menu>
+  </md-toolbar>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          <md-checkbox #inputSelectAll (change)="toogleSelectedAll($event.checked)" [disabled]="!user?.permissions[0].delete"></md-checkbox>
+        </th>
+        <th [class.td-sort]="sort.field == 'name'" (click)="changeSortAndOrder('name')">
+          <a mdTooltip="Ordenar pelo nome">
+            <span>Nome</span>
+            <md-icon *ngIf="sort.order == 'asc' && sort.field == 'name'">arrow_upward</md-icon>
+            <md-icon *ngIf="sort.order == 'desc' && sort.field == 'name'">arrow_downward</md-icon>
+          </a>
+        </th>
+        <th class="td-right" [class.td-sort]="sort.field == 'id'" (click)="changeSortAndOrder('id')">
+          <a  mdTooltip="Ordenar pelo COD">
+            <span>COD</span>
+            <md-icon *ngIf="sort.order == 'asc' && sort.field == 'id'">arrow_upward</md-icon>
+            <md-icon *ngIf="sort.order == 'desc' && sort.field == 'id'">arrow_downward</md-icon>
+          </a>
+        </th>
+        <th [class.td-sort]="sort.field == 'unit'" (click)="changeSortAndOrder('unit')">
+          <a mdTooltip="Ordenar pela Unidade">
+            <span>Unidade</span>
+            <md-icon *ngIf="sort.order == 'asc' && sort.field == 'unit'">arrow_upward</md-icon>
+            <md-icon *ngIf="sort.order == 'desc' && sort.field == 'unit'">arrow_downward</md-icon>
+          </a>
+        </th>
+        <th [class.td-sort]="sort.field == 'modality'" (click)="changeSortAndOrder('modality')">
+          <a mdTooltip="Ordenar pela modalidade">
+            <span>Modalidade</span>
+            <md-icon *ngIf="sort.order == 'asc' && sort.field == 'modality'">arrow_upward</md-icon>
+            <md-icon *ngIf="sort.order == 'desc' && sort.field == 'modality'">arrow_downward</md-icon>
+          </a>
+        </th>
+        <th [class.td-sort]="sort.field == 'course'" (click)="changeSortAndOrder('course')">
+          <a mdTooltip="Ordenar pelo curso">
+            <span>Curso</span>
+            <md-icon *ngIf="sort.order == 'asc' && sort.field == 'course'">arrow_upward</md-icon>
+            <md-icon *ngIf="sort.order == 'desc' && sort.field == 'course'">arrow_downward</md-icon>
+          </a>
+        </th>
+        <th class="td-right" [class.td-sort]="sort.field == 'class'" (click)="changeSortAndOrder('class')">
+          <a  mdTooltip="Ordenar pela turma">
+            <span>Turma</span>
+            <md-icon *ngIf="sort.order == 'asc' && sort.field == 'class'">arrow_upward</md-icon>
+            <md-icon *ngIf="sort.order == 'desc' && sort.field == 'class'">arrow_downward</md-icon>
+          </a>
+        </th>
+        <th class="td-right" [class.td-sort]="sort.field == 'regional'" (click)="changeSortAndOrder('regional')">
+          <a  mdTooltip="Ordenar pela UF">
+            <span>UF</span>
+            <md-icon *ngIf="sort.order == 'asc' && sort.field == 'regional'">arrow_upward</md-icon>
+            <md-icon *ngIf="sort.order == 'desc' && sort.field == 'regional'">arrow_downward</md-icon>
+          </a>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="isLoading">
+        <td class="loadingTable" colspan="9"><md-progress-bar mode="indeterminate"></md-progress-bar></td>
+      </tr>
+      <tr *ngIf="!isLoading && students.length==0" >
+        <td class="feedbackTable" colspan="9">Nenhum concluinte encontrado</td>
+      </tr>
+      <tr *ngFor="let student of students">
+        <td>
+          <md-checkbox [(ngModel)]="student.checked" (change)="toogleSelected($event.checked, student)" [disabled]="!user?.permissions[0].delete"></md-checkbox>
+        </td>
+        <td>{{student.name}}</td>
+        <td>{{student.id}}</td>
+        <td>{{student.unit}}</td>
+        <td>{{student.modality}}</td>
+        <td>{{student.course}}</td>
+        <td>{{student.class}}</td>
+        <td>{{student.regional}}</td>
+        <td>
+          <button md-icon-button (click)="edit(student.id)" class="button-edit" mdTooltip="Editar"
+                  *ngIf="user?.permissions[0].update">
+            <md-icon>edit</md-icon>
+          </button>
+
+          <button md-icon-button (click)="edit(student.id)" class="button-edit" mdTooltip="Visualizar"
+                  *ngIf="user?.permissions[0].view && !user?.permissions[0].create && !user?.permissions[0].update">
+            <md-icon>remove_red_eyes</md-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <md-toolbar>
+    <span class="pagination-spacer"></span>
+    <div class="pagination-info">
+      <label>
+        Página:
+        <button [disabled]="this.infoApi?.total<=0" md-icon-button class="md-icon-button" [mdMenuTriggerFor]="pageNumber" mdTooltip="Número da página">
+          {{ apiPage }}<md-icon class="md-toolbar grey">arrow_drop_down</md-icon>
+        </button>
+      </label>
+      <md-menu #pageNumber="mdMenu">
+        <button *ngFor="let page of (this.infoApi?.last_page | arrayGenerator)"  (click)="changePage(page);" md-menu-item>
+          <span>{{page}}</span>
+        </button>
+      </md-menu>
+      <label>
+        Concluintes por página:
+        <button class="md-icon-button" md-icon-button [mdMenuTriggerFor]="perPageSelect" mdTooltip="Concluintes">
+          {{ apiLimit }}<md-icon class="md-toolbar grey">arrow_drop_down</md-icon>
+        </button>
+      </label>
+      <md-menu #perPageSelect="mdMenu">
+        <button *ngFor="let value of arrayPagination" (click)="changeLimit(value)" md-menu-item><span>{{value}}</span></button>
+      </md-menu>
+      <span>
+        {{ infoApi?.from | showNumber}} - {{ infoApi?.to | showNumber}} de {{ infoApi?.total | showNumber}}
+      </span>
+      <button *ngIf="(apiPage<=this.infoApi?.last_page) && apiPage>1" md-icon-button class="previus-btn md-icon-button"
+              (click)="nextPreviousPage(-1)" mdTooltip="Anterior">
+        <md-icon class="md-toolbar grey">keyboard_arrow_left</md-icon>
+      </button>
+      <button *ngIf="apiPage<this.infoApi?.last_page" md-icon-button class="md-icon-button"
+              (click)="nextPreviousPage(1)" mdTooltip="Próximo">
+        <md-icon class="md-toolbar grey">keyboard_arrow_right</md-icon>
+      </button>
+    </div>
+  </md-toolbar>
+</md-card>

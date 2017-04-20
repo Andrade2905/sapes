@@ -27,29 +27,32 @@
     
       
     <md-card class="studentProfile-card">
-        <span>Dados Pessoais: </span>
-        <div><b> RG:</b> &nbsp; {{student?.rg_number}} </div>
-        <div>Sexo: Feminino </div> <!-- Fazer pipe-->
-        <div>Data Nascimento: &nbsp; {{student?.birth_date}} </div>
-        <div>Cor/Etnia: &nbsp; {{student?.ethnicity.description}}</div>
-        <div>Tipo de escola: Pública</div> <!-- Fazer pipe-->
-        <div>Possui alguma Deficiência: Sim, {{student?.disability.description}} </div> <!-- Fazer pipe-->
+        <span><h3>Dados Pessoais:</h3> </span>
+        <p><b> RG:</b> &nbsp; {{student?.rg_number}} </p>
+        <p><b>Sexo:</b> {{sexo?.description}} </p> 
+        <p><b>Data Nascimento:</b> &nbsp; {{student?.birth_date | date:'dd/MM/y'}} </p>
+        <p><b>Cor/Etnia:</b> &nbsp; {{student?.ethnicity.description}}</p>
+        <p><b>Tipo de escola:</b> {{origin}} </p> 
+        <p><b>Possui alguma Deficiência:</b> {{(student?.disability) ? 'Sim,' : 'Não'}} 
+         <span *ngIf="student?.disability">{{student?.disability.description}}</span> </p> 
     </md-card>
       
     <!-- Dados Escolar -->
       
     <md-card class="studentProfile-card">
         <span>Dados Escolar:</span>
-        <div>Área Tecnologica: &nbsp; {{student?.area.description}} </div>
-        <div>Curso:&nbsp; {{student?.course.description}}</div>
-        <div>DR: &nbsp; {{student?.regional}}</div>
-        <div>Turma: &nbsp; {{student?.class}}</div>
-        <div>Período: &nbsp; {{student?.start_month}}/{{student?.start_year}} - {{student?.end_month}}/{{student?.end_year}}</div>
-        <div>Ocupação: &nbsp; {{student?.occupation.description}}</div>
-        <div>EAD: &nbsp; Não </div> <!-- Fazer pipe-->
-        <div>Convênio: &nbsp; Não</div> <!-- Fazer pipe-->
-        <div>Gratuidade Regimental: &nbsp; Não</div> <!-- Fazer pipe-->
-        <div>Pronatec: &nbsp; Sim, {{student?.pronatec.description}}</div> <!-- Fazer pipe-->
+        <p><b>Área Tecnologica:</b> &nbsp; {{student?.area.description}} </p>
+        <p><b>Curso:</b>&nbsp; {{student?.course.description}}</p>
+        <p><b>DR:</b> &nbsp; {{student?.regional}}</p>
+        <p><b>Turma:</b> &nbsp; {{student?.class}}</p>
+        <p><b>Período:</b> &nbsp; {{mesInicio?.valueView}}/{{student?.start_year}} - {{mesFim?.valueView}}/{{student?.end_year}}</p>
+        <p><b>Ocupação:</b> &nbsp; {{student?.occupation.description}}</p>
+        <p><b>EAD:</b> {{(student?.distance_education) ? 'Sim' : 'Não'}} </p> 
+        <p><b>Convênio:</b> {{(student?.agreement) ? 'Sim,' : 'Não'}}
+          <span *ngIf="student?.agreement">{{student?.agreement_name}}</span></p> 
+        <p><b>Gratuidade Regimental:</b> {{(student?.regimental_gratuity) ? 'Sim' : 'Não'}}</p> 
+        <p><b>Pronatec:</b> {{(student?.pronatec) ? 'Sim,' : 'Não'}}
+          <span *ngIf="student?.pronatec">{{bolsas?.description}}</span></p> <!-- Fazer pipe-->
     </md-card>
       
     
@@ -58,17 +61,17 @@
       
     <md-card class="studentProfile-card">
         <span>Dados Contato:</span>
-        <div>Endereço: </div>
-        <div>Número: </div>
-        <div>Complemento: </div>
-        <div>Bairro: </div>
-        <div>Cidade: </div>
-        <div>UF: </div>
-        <div>CEP: </div>
-        <div>Tel. Residencial: </div>
-        <div>Celular: </div>
-        <div>Tel. Recado: </div>
-        <div>Email: </div>
+        <p><b>Endereço:</b> &nbsp; {{student?.address}}</p>
+        <p><b>Número:</b> &nbsp; {{student?.address_number}}</p>
+        <p><b>Complemento:</b> &nbsp; {{student?.address_complement}}</p>
+        <p><b>Bairro:</b> &nbsp; {{student?.address_district}}</p>
+        <p><b>Cidade:</b> &nbsp; {{student?.city.description}}</p>
+        <p><b>UF:</b> &nbsp; {{student?.city.state}}</p>
+        <p><b>CEP:</b> &nbsp; {{student?.address_zip_code}}</p>
+        <p><b>Tel. Residencial</b>: &nbsp; {{student?.home_phone}}</p>
+        <p><b>Celular:</b> &nbsp; {{student?.cell_phone}}</p>
+        <p><b>Tel. Recado:</b> &nbsp; {{student?.alternative_phone}}</p>
+        <p><b>Email:</b> &nbsp; {{student?.email}}</p>
     </md-card>
       
 
@@ -76,9 +79,9 @@
       
     <md-card class="studentProfile-card">
         <span>Situação Profissional:</span>
-        <div>Trabalho/Estágio de Forma Remunerada: </div>
-        <div>Situação Profissional: </div>
-        <div>Remuneração Mensal: </div>
+        <p><b>Trabalho/Estágio de Forma Remunerada:</b> {{(student?.answers[0]?.alternative_id == 1)  ? 'Sim' : 'Não'}} </p>      
+        <p><b>Situação Profissional:</b> {{ (student?.answers[1]?.complement) ? student?.answers[1]?.complement : situacao?.description  }} </p>
+        <p><b>Remuneração Mensal:</b> {{ remuneracao?.description }}</p>
     </md-card>
      
       
